@@ -307,6 +307,9 @@ if __name__ == "__main__":
 
     print("done training")
 
+    # Save checkpoint as {amp_name}.ckpt for pipeline compatibility
+    torch.save(network.state_dict(), os.path.join(save_path, f"{args.device}.ckpt"))
+
     if cuda:
         cuda_max_memory_allocated = torch.cuda.max_memory_allocated()
         train_track['maxmemusage'] = cuda_max_memory_allocated
