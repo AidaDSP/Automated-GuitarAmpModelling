@@ -281,6 +281,10 @@ if __name__ == "__main__":
         writer.add_scalar('TrainingAndValidation/TrainingLoss', train_track['training_losses'][-1], epoch)
         writer.add_scalar('TrainingAndValidation/LearningRate', scheduler.get_last_lr()[0], epoch)
         network.save_model('model', save_path)
+        # Periodic checkpointing every 20 epochs
+        if epoch % 20 == 0:
+            checkpoint_path = os.path.join(save_path, f"model_checkpoint_{epoch}.ckpt")
+            torch.save(network.state_dict(), checkpoint_path)
         miscfuncs.json_save(train_track, 'training_stats', save_path)
 
         if args.validation_p and patience_counter > args.validation_p:
@@ -300,14 +304,16 @@ if __name__ == "__main__":
 
     # Remove dataset from memory
     del dataset
-    # Empty the CUDA Cache
-    torch.cuda.empty_cache()
-    # Invoke garbage collector
-    gc.collect()
-
-    meminfo = torch.cuda.mem_get_info()
-    frameinfo = getframeinfo(currentframe())
-    #print("%s %d FREE CUDA Memory %d" % (frameinfo.filename, frameinfo.lineno, meminfo[0]))
+    # Empty the CUDA Cache and get memory info only if CUDA is available
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+        # Invoke garbage collector
+        gc.collect()
+        meminfo = torch.cuda.mem_get_info()
+        frameinfo = getframeinfo(currentframe())
+        #print(f"%s %d FREE CUDA Memory %d" % (frameinfo.filename, frameinfo.lineno, meminfo[0]))
+    else:
+        gc.collect()
 
     # Create a new data set
     dataset = CAMLdataset(data_dir=args.data_location)

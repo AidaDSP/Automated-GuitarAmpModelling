@@ -177,17 +177,17 @@ def WavParse(load_config='Configs/Example.json', config_location='Configs', norm
             all_val_tg = np.append(all_val_tg, splitted_y[2])
 
     if parameterized:
-        save_wav("Data/train/" + file_name + "-input.wav", samplerate, all_train_in.T, flatten=False)
-        save_wav("Data/test/" + file_name + "-input.wav", samplerate, all_test_in.T, flatten=False)
-        save_wav("Data/val/" + file_name + "-input.wav", samplerate, all_val_in.T, flatten=False)
+        save_wav("Data/Processed/train/" + file_name + "-input.wav", samplerate, all_train_in.T, flatten=False)
+        save_wav("Data/Processed/test/" + file_name + "-input.wav", samplerate, all_test_in.T, flatten=False)
+        save_wav("Data/Processed/val/" + file_name + "-input.wav", samplerate, all_val_in.T, flatten=False)
     else:
-        save_wav("Data/train/" + file_name + "-input.wav", samplerate, all_train_in)
-        save_wav("Data/test/" + file_name + "-input.wav", samplerate, all_test_in)
-        save_wav("Data/val/" + file_name + "-input.wav", samplerate, all_val_in)
+        save_wav("Data/Processed/train/" + file_name + "-input.wav", samplerate, all_train_in)
+        save_wav("Data/Processed/test/" + file_name + "-input.wav", samplerate, all_test_in)
+        save_wav("Data/Processed/val/" + file_name + "-input.wav", samplerate, all_val_in)
 
-    save_wav("Data/train/" + file_name + "-target.wav", samplerate, all_train_tg)
-    save_wav("Data/test/" + file_name + "-target.wav", samplerate, all_test_tg)
-    save_wav("Data/val/" + file_name + "-target.wav", samplerate, all_val_tg)
+    save_wav("Data/Processed/train/" + file_name + "-target.wav", samplerate, all_train_tg)
+    save_wav("Data/Processed/test/" + file_name + "-target.wav", samplerate, all_test_tg)
+    save_wav("Data/Processed/val/" + file_name + "-target.wav", samplerate, all_val_tg)
 
     print("Saved processed wav files into dataset")
 
