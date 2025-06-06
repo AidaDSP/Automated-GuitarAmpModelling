@@ -287,6 +287,17 @@ if __name__ == "__main__":
             torch.save(network.state_dict(), checkpoint_path)
         miscfuncs.json_save(train_track, 'training_stats', save_path)
 
+        # --- NEW: Check for cancel flag and save checkpoint if requested ---
+        cancel_flag_path = os.path.join(save_path, 'CANCEL_REQUESTED')
+        if os.path.exists(cancel_flag_path):
+            print('Cancellation requested. Saving checkpoint and exiting...')
+            network.save_model('model', save_path)
+            network.save_model('model_best', save_path)
+            torch.save(network.state_dict(), os.path.join(save_path, 'model_cancel.ckpt'))
+            miscfuncs.json_save(train_track, 'training_stats', save_path)
+            os.remove(cancel_flag_path)
+            exit(0)
+
         if args.validation_p and patience_counter > args.validation_p:
             validation_patience_limit_epoch = epoch
             break
